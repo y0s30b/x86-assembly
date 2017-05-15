@@ -98,8 +98,8 @@ sector_2:						; Program Starts
 
 ;---------------------- Write your Name and ID here-----------------------------;
 
-ID  db 'ID : 2015000000',0
-NAMEE db 'NAME : Hong Kil Dong',0
+ID  db 'ID : 2015312229',0
+NAMEE db 'NAME : Yoseob Kim',0
 Answer db 'A value in Stack Pointer(word size) : ',0
 
 ;-------------------------------------------------------------------------------;
