@@ -71,6 +71,7 @@ sector_2:						; Program Starts
 	mov sp, 0x10
 	mov ax, 0x1234
 	push ax
+
 	mov bx, 0x8FFC
 	mov dl, byte [ds:bx]
 	add ah, dl
@@ -86,34 +87,45 @@ sector_2:						; Program Starts
 ; Print your Name in VMware screen											    ;
 ; Print your ID in VMware screen											    ;
 ; Print the value(word size) in the Stack Pointer after executing the above code;
-;																				;
-	mov byte [es:0x0], 'H'
-	mov byte [es:0x1], 0x04												;
-	mov byte [es:0x2], 'e'
-	mov byte [es:0x3], 0x04													;
-	mov byte [es:0x4], 'l'
-	mov byte [es:0x5], 0x04													;
-	mov byte [es:0x6], 'l'
-	mov byte [es:0x7], 0x04													;
-	mov byte [es:0x8], 'o'
-	mov byte [es:0x9], 0x04													;
-	mov byte [es:0xA], ','
-	mov byte [es:0xB], 0x04													;
-	mov byte [es:0xC], ' '
-	mov byte [es:0xD], 0x04													;
-	mov byte [es:0xE], 'w'
-	mov byte [es:0xF], 0x04													;
-	mov byte [es:0x10], 'o'
-	mov byte [es:0x11], 0x04												;
-	mov byte [es:0x12], 'r'
-	mov byte [es:0x13], 0x04												;
-	mov byte [es:0x14], 'l'
-	mov byte [es:0x15], 0x04												;
-	mov byte [es:0x16], 'd'
-	mov byte [es:0x17], 0x04												;
-	mov byte [es:0x18], '!'
-	mov byte [es:0x19], 0x04
 
+	; 'A program prints some informations' by Yoseob Kim(2015312229)
+	; SKKU Microprocessor x86-HW1, 2017-05-17
+	
+	; print ID		
+	mov esi, ID
+	mov edi, 0x1E0
+	
+IDloop:	
+	movsb
+	mov byte [es:edi], 0x04
+	inc edi
+	cmp esi, ID+0xF
+	jne IDloop
+
+	; print NAME in English (Unicode support??)
+	mov esi, NAMEE
+	mov edi, 0x280
+
+NAMEloop:
+	movsb
+	mov byte [es:edi], 0x04
+	inc edi
+	cmp esi, NAMEE+0x11
+	jne NAMEloop
+
+	; print Answer - the value in the stack pointer
+	mov esi, Answer
+	mov edi, 0x3C0
+
+Answerloop:
+	movsb
+	mov byte [es:edi], 0x04
+	inc edi
+	cmp esi, Answer+0x26
+	jne Answerloop
+
+	; get the value of stack pointer
+	; blablabla
 
 ;																				;
 ;																				;
