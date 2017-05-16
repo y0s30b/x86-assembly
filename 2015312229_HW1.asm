@@ -72,15 +72,16 @@ sector_2:						; Program Starts
 	mov ax, 0x1234
 	push ax
 
-	mov bx, 0x8FFC
-	mov dl, byte [ds:bx]
-	add ah, dl
-	xchg al, bh
-	mov bx, 0x8FFD
-	mov word[ds:bx], ax
-	sub al, ah
-	mov bx, 0x8FFF
-	mov byte[ds:bx], al
+	; what is this (below)?
+;	mov bx, 0x8FFC
+;	mov dl, byte [ds:bx]
+;	add ah, dl
+;	xchg al, bh
+;	mov bx, 0x8FFD
+;	mov word[ds:bx], ax
+;	sub al, ah
+;	mov bx, 0x8FFF
+;	mov byte[ds:bx], al
 
 	
 ;-------------------------Write your code here----------------------------------;	
@@ -97,7 +98,7 @@ sector_2:						; Program Starts
 	
 IDloop:	
 	movsb
-	mov byte [es:edi], 0x04
+	mov byte [es:edi], 0x1f
 	inc edi
 	cmp esi, ID+0xF
 	jne IDloop
@@ -108,7 +109,7 @@ IDloop:
 
 NAMEloop:
 	movsb
-	mov byte [es:edi], 0x04
+	mov byte [es:edi], 0x2f
 	inc edi
 	cmp esi, NAMEE+0x11
 	jne NAMEloop
@@ -119,14 +120,79 @@ NAMEloop:
 
 Answerloop:
 	movsb
-	mov byte [es:edi], 0x04
+	mov byte [es:edi], 0x4f
 	inc edi
 	cmp esi, Answer+0x26
 	jne Answerloop
 
-	; get the value of stack pointer
-	; blablabla
 
+	; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ;
+	; !!! get the value of stack pointer !!! ;
+	; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ;
+
+	; My solution: transform each hexadecimal number to ascii character.
+	; ex. 1234H --> 1 goes to '1', 2 goes to '2', 3 goes to '3', 4 goes to '4' respectively.
+
+	mov bp, sp	; direct usage of sp is not allowed in NASM.
+	mov word ax, [ss:bp]
+	
+;	mov bx, cx
+;	add bh, 0x30
+;	mov byte [es:0x500], bh ; --> B, 12
+
+;	add bl, 0x30
+;	mov byte [es:0x502], bl ; --> d, 34
+
+;	mov bx, 0x0
+
+	; bit 15 ~ 12
+	mov bh, ah
+	shr bh, 4
+	aaa
+	add bh, 0x30
+	mov byte [es:edi], bh
+	inc edi
+	mov byte [es:edi], 0x5f
+	inc edi
+
+	; bit 11 ~ 8
+	mov word ax, [ss:bp]	; bring stack pointer value each time.
+	mov bh, ah
+	and bh, 0x0F
+	aaa
+	add bh, 0x30
+	mov byte [es:edi], bh
+	inc edi
+	mov byte [es:edi], 0x5f
+	inc edi
+
+	; bit 7 ~ 4
+	mov word ax, [ss:bp]
+	mov bl, al
+	shr bl, 4
+	aaa
+	add bl, 0x30
+	mov byte [es:edi], bl
+	inc edi
+	mov byte [es:edi], 0x5f
+	inc edi
+
+	; bit 3 ~ 0
+	mov word ax, [ss:bp]
+	mov bl, al
+	and bl, 0x0F
+	aaa
+	add bl, 0x30
+	mov byte [es:edi], bl
+	inc edi
+	mov byte [es:edi], 0x5f
+	inc edi
+
+	; Important thing is,
+	; be careful of using ax, bx, cx, dx (core registers) to store any values.
+	; if doing some operation like 'add', the value of core register would be changed.
+	; if using core register without awareness, the exactly same problem occurs as in ARM-HW1.
+	; (core register value "twisting" problem)
 ;																				;
 ;																				;
 ;																				;
