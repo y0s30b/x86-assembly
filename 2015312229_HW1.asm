@@ -87,6 +87,34 @@ sector_2:						; Program Starts
 ; Print your ID in VMware screen											    ;
 ; Print the value(word size) in the Stack Pointer after executing the above code;
 ;																				;
+	mov byte [es:0x0], 'H'
+	mov byte [es:0x1], 0x04												;
+	mov byte [es:0x2], 'e'
+	mov byte [es:0x3], 0x04													;
+	mov byte [es:0x4], 'l'
+	mov byte [es:0x5], 0x04													;
+	mov byte [es:0x6], 'l'
+	mov byte [es:0x7], 0x04													;
+	mov byte [es:0x8], 'o'
+	mov byte [es:0x9], 0x04													;
+	mov byte [es:0xA], ','
+	mov byte [es:0xB], 0x04													;
+	mov byte [es:0xC], ' '
+	mov byte [es:0xD], 0x04													;
+	mov byte [es:0xE], 'w'
+	mov byte [es:0xF], 0x04													;
+	mov byte [es:0x10], 'o'
+	mov byte [es:0x11], 0x04												;
+	mov byte [es:0x12], 'r'
+	mov byte [es:0x13], 0x04												;
+	mov byte [es:0x14], 'l'
+	mov byte [es:0x15], 0x04												;
+	mov byte [es:0x16], 'd'
+	mov byte [es:0x17], 0x04												;
+	mov byte [es:0x18], '!'
+	mov byte [es:0x19], 0x04
+
+
 ;																				;
 ;																				;
 ;																				;
