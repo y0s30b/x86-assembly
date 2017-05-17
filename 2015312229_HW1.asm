@@ -69,7 +69,7 @@ sector_2:						; Program Starts
 	mov ax, 0x8FF
 	mov ss, ax
 	mov sp, 0x10
-	mov ax, 0x1234
+	mov ax, 0x4246
 	push ax
 
 	; what is this (below)?
@@ -148,8 +148,17 @@ Answerloop:
 	; bit 15 ~ 12
 	mov bh, ah
 	shr bh, 4
+
+	cmp bh, 0xA
+	jl	l1_9
+	jge l1_A
 	aaa
+l1_9:
 	add bh, 0x30
+	jmp l1
+l1_A:
+	add bh, 0x37
+l1:
 	mov byte [es:edi], bh
 	inc edi
 	mov byte [es:edi], 0x5f
