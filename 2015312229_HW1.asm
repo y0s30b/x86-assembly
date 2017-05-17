@@ -69,7 +69,7 @@ sector_2:						; Program Starts
 	mov ax, 0x8FF
 	mov ss, ax
 	mov sp, 0x10
-	mov ax, 0x4246
+	mov ax, 0x1234
 	push ax
 
 	; what is this (below)?
@@ -149,7 +149,9 @@ Answerloop:
 	mov bh, ah
 	shr bh, 4
 
-	cmp bh, 0xA
+	cmp bh, 0xA				; compare the number with A(decimal 10)
+							; if the number is less than 10, add 48 (means '0' in ascii code).
+							; if the number is greater than or equal to 10, add 55 ('A' is 65). 
 	jl	l1_9
 	jge l1_A
 	aaa
@@ -168,8 +170,17 @@ l1:
 	mov word ax, [ss:bp]	; bring stack pointer value each time.
 	mov bh, ah
 	and bh, 0x0F
+
+	cmp bh, 0xA
+	jl l2_9
+	jge l2_A
 	aaa
+l2_9:
 	add bh, 0x30
+	jmp l2
+l2_A:
+	add bh, 0x37
+l2:
 	mov byte [es:edi], bh
 	inc edi
 	mov byte [es:edi], 0x5f
@@ -179,8 +190,17 @@ l1:
 	mov word ax, [ss:bp]
 	mov bl, al
 	shr bl, 4
+
+	cmp bl, 0xA
+	jl l3_9
+	jge l3_A
 	aaa
+l3_9:
 	add bl, 0x30
+	jmp l3
+l3_A:
+	add bl, 0x37
+l3:
 	mov byte [es:edi], bl
 	inc edi
 	mov byte [es:edi], 0x5f
@@ -190,8 +210,17 @@ l1:
 	mov word ax, [ss:bp]
 	mov bl, al
 	and bl, 0x0F
+
+	cmp bl, 0xA
+	jl l4_9
+	jge l4_A
 	aaa
+l4_9:	
 	add bl, 0x30
+	jmp l4
+l4_A:
+	add bl, 0x37
+l4:
 	mov byte [es:edi], bl
 	inc edi
 	mov byte [es:edi], 0x5f
