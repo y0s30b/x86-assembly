@@ -73,15 +73,15 @@ sector_2:						; Program Starts
 	push ax
 
 	; what is this (below)?
-;	mov bx, 0x8FFC
-;	mov dl, byte [ds:bx]
-;	add ah, dl
-;	xchg al, bh
-;	mov bx, 0x8FFD
-;	mov word[ds:bx], ax
-;	sub al, ah
-;	mov bx, 0x8FFF
-;	mov byte[ds:bx], al
+	mov bx, 0x8FFC
+ 	mov dl, byte [ds:bx]
+ 	add ah, dl
+ 	xchg al, bh
+ 	mov bx, 0x8FFD
+ 	mov word[ds:bx], ax
+ 	sub al, ah
+ 	mov bx, 0x8FFF
+ 	mov byte[ds:bx], al
 
 	
 ;-------------------------Write your code here----------------------------------;	
