@@ -75,9 +75,9 @@ sector_2:						; Program Starts
 ;----------------------Write your code here------------------------
 ;																  ;
 ;Control Register 0(CR0) setting								  ;
-	mov eax, CR0
-	or eax, 0x1
-	mov CR0, eax
+	mov ebx, CR0
+	or ebx, 1h
+	mov CR0, ebx
 ;																  ;
 ;------------------------------------------------------------------
 
@@ -95,20 +95,25 @@ Protected_START:	; Protected mode starts
 [bits 32]			; Assembly command
 					; Let NASM compiler know that this code consists of 32its
 					
-	jmp $							; jump to current address,
+	;jmp $							; jump to current address,
 									; infinite loop
-									
+	;use 'jmp $' for testing each steps.								
 									
 ;----------------------Write your code here------------------------
 ;																  ;
 ; Store the value of Selector which indicates the domain 		  ;
 ; of Video Memory on ES Register								  ;
+	mov ax, VIDEO_SEL
+	mov es, ax
+
+	;mov byte [es: 80*2*1+2*0], 't'		; for test
+	;mov byte [es: 80*2*1+2*0+1], 0x0f
 ;																  ;
 ;------------------------------------------------------------------
 
 	call print_protected	
 	call print_cs_Protected
-	;jmp $							; for first problem
+	jmp $							; for first problem
 									; after finishing making GDT and loading it,
 									; remove the remark ';'
 									
@@ -262,7 +267,7 @@ SYS_CODE_SEL equ	08h
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	9Ah			; flags, type
-	db	C0h			; limit 19:16, flags
+	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
 SYS_DATA_SEL equ	10h
@@ -271,19 +276,19 @@ SYS_DATA_SEL equ	10h
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	92h			; flags, type
-	db	C0h			; limit 19:16, flags
+	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Video Segment Descriptor										  ;
 VIDEO_SEL	 equ	18h
 	; idx:3
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	8000h		; base 15:0	
 	db	0Bh			; base 23:16
 	db	92h			; flags, type
 	db	40h			; limit 19:16, flags
 	db	00h			; base 31:24
 ;LDTR descriptor (for LDT)										  ;
-LDTR		 equ	20h
+;LDTR		 equ	20h
 	; idx:4
 ;	dw	FFFFh		; limit 15:0	
 ;	dw	????h		; base 15:0	
@@ -301,6 +306,9 @@ gdt_ptr:
 ;																  ;
 ;Calculate the base and limit of GDT							  ;
 ;Store in gdt_prt memory address								  ;
+
+	dw	1Fh	; limit
+	dd	gdt	; base address
 ;																  ;
 ;------------------------------------------------------------------
 
@@ -310,23 +318,23 @@ gdt_ptr:
 
 ;-------------------------write your code here---------------------
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_0	equ		04h
-	; idx:0
-	dw	00FFh		; limit 15:0	
-	dw	0000h		; base 15:0	
-	db	00h			; base 23:16
-	db	9Ah			; flags, type
-	db	C0h			; limit 19:16, flags
-	db	00h			; base 31:24
+;LDT_CODE_SEL_0	equ		04h
+;	; idx:0
+;	dw	00FFh		; limit 15:0	
+;	dw	0000h		; base 15:0	
+;	db	00h			; base 23:16
+;	db	9Ah			; flags, type
+;	db	0C0h			; limit 19:16, flags
+;	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
-LDT_DATA_SEL_0	equ		0Ch
-	; idx:1
-	dw	00FFh		; limit 15:0	
-	dw	0000h		; base 15:0	
-	db	00h			; base 23:16
-	db	92h			; flags, type
-	db	C0h			; limit 19:16, flags
-	db	00h			; base 31:24
+;LDT_DATA_SEL_0	equ		0Ch
+;	; idx:1
+;	dw	00FFh		; limit 15:0	
+;	dw	0000h		; base 15:0	
+;	db	00h			; base 23:16
+;	db	92h			; flags, type
+;	db	0C0h			; limit 19:16, flags
+;	db	00h			; base 31:24
 ;																  ;
 ;------------------------------------------------------------------
 			
