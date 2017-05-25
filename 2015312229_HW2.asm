@@ -1,3 +1,4 @@
+; SKKU Microprocessor HW2 of x86, by Yoseob Kim(2015312229)
 [org 0x7c00]		; Assembly command
 					; Let NASM compiler know starting address of memory
 					; BIOS reads 1st sector and copied it on memory address 0x7c00
@@ -67,12 +68,16 @@ sector_2:						; Program Starts
 ;----------------------Write your code here------------------------
 ;																  ;
 ;Load the address of GDT to GDTR								  ;
+	lgdt [gdt_ptr]
 ;																  ;
 ;------------------------------------------------------------------
 
 ;----------------------Write your code here------------------------
 ;																  ;
 ;Control Register 0(CR0) setting								  ;
+	mov eax, CR0
+	or eax, 0x1
+	mov CR0, eax
 ;																  ;
 ;------------------------------------------------------------------
 
