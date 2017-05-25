@@ -120,7 +120,20 @@ Protected_START:	; Protected mode starts
 	
 ;-------------------------write your code here---------------------
 ; Put base address of ldt to ldtr descriptor					  ;
-; Load ldt														  ;
+	; get the base address of LDT and set the LDTR in GDT idx:4.
+	; base 15:0 of the start address of ldt													  ;
+	mov eax, ldt
+	mov [gdt+LDTR+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov [gdt+LDTR+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt
+	shr eax, 24
+	mov [gdt+LDTR+7h], al
+; Load ldt
+;	lldt [ldt]
+
 ; 											 					  ;
 ;																  ;
 ;------------------------------------------------------------------	
@@ -288,14 +301,14 @@ VIDEO_SEL	 equ	18h
 	db	40h			; limit 19:16, flags
 	db	00h			; base 31:24
 ;LDTR descriptor (for LDT)										  ;
-;LDTR		 equ	20h
+LDTR		 equ	20h
 	; idx:4
-;	dw	FFFFh		; limit 15:0	
-;	dw	????h		; base 15:0	
-;	db	??h			; base 23:16
-;	db	82h			; flags, type
-;	db	00h			; limit 19:16, flags
-;	db	??h			; base 31:24
+	dw	0FFFFh		; limit 15:0	
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags
+	db	0h			; base 31:24			; temporary set 0
 ;																  ;
 ;------------------------------------------------------------------
 
@@ -307,7 +320,7 @@ gdt_ptr:
 ;Calculate the base and limit of GDT							  ;
 ;Store in gdt_prt memory address								  ;
 
-	dw	1Fh	; limit
+	dw	27h	; limit
 	dd	gdt	; base address
 ;																  ;
 ;------------------------------------------------------------------
@@ -317,24 +330,25 @@ gdt_ptr:
 ;---------------------------Local Description Table-----------------------
 
 ;-------------------------write your code here---------------------
+ldt:
 ;Code Segment Descriptor										  ;
-;LDT_CODE_SEL_0	equ		04h
-;	; idx:0
-;	dw	00FFh		; limit 15:0	
-;	dw	0000h		; base 15:0	
-;	db	00h			; base 23:16
-;	db	9Ah			; flags, type
-;	db	0C0h			; limit 19:16, flags
-;	db	00h			; base 31:24
+LDT_CODE_SEL_0	equ		04h
+	; idx:0
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
-;LDT_DATA_SEL_0	equ		0Ch
-;	; idx:1
-;	dw	00FFh		; limit 15:0	
-;	dw	0000h		; base 15:0	
-;	db	00h			; base 23:16
-;	db	92h			; flags, type
-;	db	0C0h			; limit 19:16, flags
-;	db	00h			; base 31:24
+LDT_DATA_SEL_0	equ		0Ch
+	; idx:1
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	92h			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
 ;																  ;
 ;------------------------------------------------------------------
 			
