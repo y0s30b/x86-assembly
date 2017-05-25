@@ -251,8 +251,8 @@ gdt:
 	db	0			; base 31:24
 SYS_CODE_SEL equ	08h
 ;-------------------------write your code here---------------------
-;Code Segment Descriptor
-	; idx:1										  ;
+;Code Segment Descriptor										  ;
+	; idx:1										  
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
@@ -260,6 +260,7 @@ SYS_CODE_SEL equ	08h
 	db	C0h			; limit 19:16, flags
 	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
+SYS_DATA_SEL equ	10h
 	; idx:2
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -268,6 +269,7 @@ SYS_CODE_SEL equ	08h
 	db	C0h			; limit 19:16, flags
 	db	00h			; base 31:24
 ;Video Segment Descriptor										  ;
+VIDEO_SEL	 equ	18h
 	; idx:3
 	dw	FFFFh		; limit 15:0	
 	dw	8000h		; base 15:0	
@@ -276,6 +278,7 @@ SYS_CODE_SEL equ	08h
 	db	40h			; limit 19:16, flags
 	db	00h			; base 31:24
 ;LDTR descriptor (for LDT)										  ;
+LDTR		 equ	20h
 	; idx:4
 ;	dw	FFFFh		; limit 15:0	
 ;	dw	????h		; base 15:0	
@@ -302,7 +305,23 @@ gdt_ptr:
 
 ;-------------------------write your code here---------------------
 ;Code Segment Descriptor										  ;
+LDT_CODE_SEL_0	equ		04h
+	; idx:0
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	C0h			; limit 19:16, flags
+	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
+LDT_DATA_SEL_0	equ		0Ch
+	; idx:1
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	92h			; flags, type
+	db	C0h			; limit 19:16, flags
+	db	00h			; base 31:24
 ;																  ;
 ;------------------------------------------------------------------
 			
