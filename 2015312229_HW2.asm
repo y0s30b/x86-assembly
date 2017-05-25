@@ -113,7 +113,7 @@ Protected_START:	; Protected mode starts
 
 	call print_protected	
 	call print_cs_Protected
-	jmp $							; for first problem
+	;jmp $							; for first problem
 									; after finishing making GDT and loading it,
 									; remove the remark ';'
 									
@@ -123,22 +123,22 @@ Protected_START:	; Protected mode starts
 	; get the base address of LDT and set the LDTR in GDT idx:4.
 	; base 15:0 of the start address of ldt													  ;
 	mov eax, ldt
-	mov [gdt+LDTR+2h], ax
+	mov word [gdt+LDTR+2h], ax
 	; base 23:16 of the start address of ldt
 	shr eax, 16
-	mov [gdt+LDTR+4h], al
+	mov byte [gdt+LDTR+4h], al
 	; base 31:24 of the start address of ldt
 	mov eax, ldt
 	shr eax, 24
-	mov [gdt+LDTR+7h], al
+	mov byte [gdt+LDTR+7h], al
 ; Load ldt
-;	lldt [ldt]
-
+	mov ax, LDTR
+	lldt ax
 ; 											 					  ;
 ;																  ;
 ;------------------------------------------------------------------	
 
-	;jmp 0x04:LDT0_Start			; for second problem
+	jmp 0x04:LDT0_Start			; for second problem
 									; after finishing making LDT and loading it,
 									; remove the remark ';'
 
@@ -146,7 +146,7 @@ LDT0_Start:
 
 	call print_cs_LDT0_Start	
 	
-	;jmp $							; for second problem
+	jmp $							; for second problem
 									; after finishing making LDT and loading it,
 									; remove the remark ';'	
 	
@@ -332,7 +332,7 @@ gdt_ptr:
 ;-------------------------write your code here---------------------
 ldt:
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_0	equ		04h
+;LDT_CODE_SEL_0	equ		04h
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -341,7 +341,7 @@ LDT_CODE_SEL_0	equ		04h
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
-LDT_DATA_SEL_0	equ		0Ch
+;LDT_DATA_SEL_0	equ		0Ch
 	; idx:1
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
