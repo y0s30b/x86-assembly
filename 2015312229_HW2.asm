@@ -332,7 +332,7 @@ gdt_ptr:
 ;-------------------------write your code here---------------------
 ldt:
 ;Code Segment Descriptor										  ;
-;LDT_CODE_SEL_0	equ		04h
+;LDT_CODE_SEL_0	equ		00h
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -341,7 +341,7 @@ ldt:
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
-;LDT_DATA_SEL_0	equ		0Ch
+;LDT_DATA_SEL_0	equ		08h
 	; idx:1
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
