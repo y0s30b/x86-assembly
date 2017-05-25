@@ -242,18 +242,47 @@ print_cs_Protected:
 ;[SECTION .data]
 ;null descriptor. gdt_ptr could be put here to save a few
 gdt:
-	dw	0			
-	dw	0			
-	db	0			
-	db	0			
-	db	0			
-	db	0			
+	; idx:0 Null Descriptor
+	dw	0			; limit 15:0
+	dw	0			; base 15:0
+	db	0			; base 23:16
+	db	0			; flags, type
+	db	0			; limit 19:16, flags
+	db	0			; base 31:24
 SYS_CODE_SEL equ	08h
 ;-------------------------write your code here---------------------
-;Code Segment Descriptor										  ;
+;Code Segment Descriptor
+	; idx:1										  ;
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	C0h			; limit 19:16, flags
+	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
+	; idx:2
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	92h			; flags, type
+	db	C0h			; limit 19:16, flags
+	db	00h			; base 31:24
 ;Video Segment Descriptor										  ;
+	; idx:3
+	dw	FFFFh		; limit 15:0	
+	dw	8000h		; base 15:0	
+	db	0Bh			; base 23:16
+	db	92h			; flags, type
+	db	40h			; limit 19:16, flags
+	db	00h			; base 31:24
 ;LDTR descriptor (for LDT)										  ;
+	; idx:4
+;	dw	FFFFh		; limit 15:0	
+;	dw	????h		; base 15:0	
+;	db	??h			; base 23:16
+;	db	82h			; flags, type
+;	db	00h			; limit 19:16, flags
+;	db	??h			; base 31:24
 ;																  ;
 ;------------------------------------------------------------------
 
