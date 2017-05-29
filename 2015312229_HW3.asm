@@ -1,3 +1,4 @@
+; SKKU Microprocessor HW3 of x86, by Yoseob Kim(2015312229)
 [org 0x7c00]		; Assembly command
 					; Let NASM compiler know starting address of memory
 					; BIOS reads 1st sector and copied it on memory address 0x7c00
@@ -301,9 +302,29 @@ gdt3:
 ;-------------------------write your code here---------------------------
 ; LDTR descriptors for two LDTs                                         ;
 ;																        ;	
-;																        ;	
-;																        ;	
-;																        ;	
+
+; base addresses and limits of LDTRs in GDT must be defined in upper code blocks.
+;LDTR1 descriptor (for LDT1)
+LDTR1		 equ	20h
+gdt4:
+	; idx:4
+	dw	0h			; limit 15:0			; temporary set 0
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags	; temporary set 0
+	db	0h			; base 31:24			; temporary set 0
+	
+;LDTR2 descriptor (for LDT1)
+LDTR2		 equ	28h
+gdt5:
+	; idx:4
+	dw	0h			; limit 15:0			; temporary set 0
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags	; temporary set 0
+	db	0h			; base 31:24			; temporary set 0
 ;																        ;	
 ;																        ;	
 ;------------------------------------------------------------------------		
