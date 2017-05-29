@@ -337,10 +337,58 @@ gdt_ptr:
 ;-------------------------write your code here---------------------------
 ; Make Local Descriptor Tables.									        ;
 ; Fill Code Segment Descriptors and Data Segment Descriptors	        ;	
-;																        ;	
-;																        ;	
-;																        ;	
-;																        ;	
+;																        ;
+
+ldt:
+;Code Segment Descriptor										  ;
+LDT_CODE_SEL_0	equ		00h
+	; idx:0
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
+;Data Segment Descriptor										  ;
+LDT_DATA_SEL_0	equ		08h
+	; idx:1
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	92h			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24	
+;Code Segment Descriptor										  ;
+LDT_CODE_SEL_1	equ		10h
+	; idx:0
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
+
+ldt2:
+;Data Segment Descriptor										  ;
+LDT_DATA_SEL_1	equ		18h
+	; idx:1
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	92h			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
+;Code Segment Descriptor										  ;
+LDT_CODE_SEL_2	equ		20h
+	; idx:0
+	dw	00FFh		; limit 15:0	
+	dw	0000h		; base 15:0	
+	db	00h			; base 23:16
+	db	9Ah			; flags, type
+	db	0C0h		; limit 19:16, flags
+	db	00h			; base 31:24
+	
+ldt_end:
 ;																        ;	
 ;																        ;	
 ;------------------------------------------------------------------------
