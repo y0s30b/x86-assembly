@@ -137,6 +137,10 @@ Protected_START:	; Protected mode starts
 LDT0_Start:
 
 ; print strings
+	mov edi, 80*2*3+2*0
+	mov eax, MSG_LDT0_Start
+	mov bl, 0x02
+	call printf_s
 ; control transfer
 
 	call print_cs_LDT0_Start
@@ -146,6 +150,10 @@ LDT0_Start:
 LDT0_Next:
 
 ; print strings
+	mov edi, 80*2*5+2*0
+	mov eax, MSG_LDT0_Next
+	mov bl, 0x02
+	call printf_s
 ; control transfer
 
 	call print_cs_LDT0_Next
@@ -154,6 +162,10 @@ LDT0_Next:
 LDT1_Start:
 
 ; print strings
+	mov edi, 80*2*7+2*0
+	mov eax, MSG_LDT1_Start
+	mov bl, 0x02
+	call printf_s
 ; control transfer
 
 	call print_cs_LDT1_Start
