@@ -146,9 +146,13 @@ LDT0_Start:
 	call print_cs_LDT0_Start
 
 ; control transfer	
-	jmp $
+	;jmp $ ; for the 1st problem(Protected_START->LDT0_Start) check
+
+	call LDT_CODE_SEL_1:LDT0_Next
+	jmp $ ; for the 2nd problem(LDT0_Start->LDT0->Next->LDT0_Start) check
 
 LDT0_Next:
+	pushad
 
 ; print strings
 	mov edi, 80*2*5+2*0
@@ -159,6 +163,9 @@ LDT0_Next:
 
 	call print_cs_LDT0_Next
     call print_cs_in_stack
+
+	popad
+	retf
 
 LDT1_Start:
 
