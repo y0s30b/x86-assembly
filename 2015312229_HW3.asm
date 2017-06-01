@@ -87,6 +87,7 @@ Protected_START:	; Protected mode starts
 ;-------------------------write your code here---------------------
 ; control transfer 						  						  ;
 ; 											 					  ;
+	; STEP 1
 	; get the base address of LDT and set the LDTR in GDT idx:4.
 	; base 15:0 of the start address of ldt		
 
@@ -113,8 +114,23 @@ Protected_START:	; Protected mode starts
 	mov byte [gdt+LDTR2+7h], al
 
 	; offset setting (ldt1)
+	mov ax, ldt2 - ldt - 1
+	mov word [gdt+LDTR1], ax
 
 	; offset setting (ldt2)
+	mov ax, ldt_end - ldt2 - 1
+	mov word [gdt+LDTR2], ax
+
+	; STEP 2
+	; control transfer
+
+	mov ax, LDTR1
+	lldt ax
+
+	; blabla
+
+	mov ax, LDTR2
+	lldt ax
 ;																  ;
 ;------------------------------------------------------------------	
 
@@ -398,7 +414,7 @@ LDT_CODE_SEL_1	equ		10h
 
 ldt2:
 ;Data Segment Descriptor										  ;
-LDT_DATA_SEL_1	equ		18h
+LDT_DATA_SEL_1	equ		00h
 	; idx:1
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -407,7 +423,7 @@ LDT_DATA_SEL_1	equ		18h
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_2	equ		20h
+LDT_CODE_SEL_2	equ		08h
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
