@@ -87,6 +87,34 @@ Protected_START:	; Protected mode starts
 ;-------------------------write your code here---------------------
 ; control transfer 						  						  ;
 ; 											 					  ;
+	; get the base address of LDT and set the LDTR in GDT idx:4.
+	; base 15:0 of the start address of ldt		
+
+	; ldt1 setting (base address)
+	mov eax, ldt
+	mov word [gdt+LDTR1+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR1+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt
+	shr eax, 24
+	mov byte [gdt+LDTR1+7h], al
+
+	; ldt2 setting (base address)
+	mov eax, ldt2
+	mov word [gdt+LDTR2+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR2+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt2
+	shr eax, 24
+	mov byte [gdt+LDTR2+7h], al
+
+	; offset setting (ldt1)
+
+	; offset setting (ldt2)
 ;																  ;
 ;------------------------------------------------------------------	
 
