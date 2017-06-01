@@ -124,6 +124,7 @@ Protected_START:	; Protected mode starts
 	; STEP 2
 	; control transfer
 
+	; set LDT1 to current-using LDT
 	mov ax, LDTR1
 	lldt ax
 
@@ -149,10 +150,16 @@ LDT0_Start:
 	;jmp $ ; for the 1st problem(Protected_START->LDT0_Start) check
 
 	call LDT_CODE_SEL_1:LDT0_Next
-	jmp $ ; for the 2nd problem(LDT0_Start->LDT0->Next->LDT0_Start) check
+	;jmp $ ; for the 2nd problem(LDT0_Start->LDT0->Next->LDT0_Start) check
+
+; set LDT2 to current-using LDT
+	mov ax, LDTR2
+	lldt ax
+
+	jmp LDT_CODE_SEL_2:LDT1_Start
 
 LDT0_Next:
-	pushad
+;	pushad
 
 ; print strings
 	mov edi, 80*2*5+2*0
@@ -164,7 +171,7 @@ LDT0_Next:
 	call print_cs_LDT0_Next
     call print_cs_in_stack
 
-	popad
+;	popad
 	retf
 
 LDT1_Start:
@@ -434,7 +441,7 @@ LDT_CODE_SEL_1	equ		14h
 
 ldt2:
 ;Data Segment Descriptor										  ;
-LDT_DATA_SEL_1	equ		00h
+LDT_DATA_SEL_1	equ		04h
 	; idx:1
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -443,7 +450,7 @@ LDT_DATA_SEL_1	equ		00h
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_2	equ		08h
+LDT_CODE_SEL_2	equ		0Ch
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
