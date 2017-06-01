@@ -127,10 +127,10 @@ Protected_START:	; Protected mode starts
 	mov ax, LDTR1
 	lldt ax
 
-	; blabla
+	jmp LDT_CODE_SEL_0:LDT0_Start
 
-	mov ax, LDTR2
-	lldt ax
+;	mov ax, LDTR2
+;	lldt ax
 ;																  ;
 ;------------------------------------------------------------------	
 
@@ -146,6 +146,7 @@ LDT0_Start:
 	call print_cs_LDT0_Start
 
 ; control transfer	
+	jmp $
 
 LDT0_Next:
 
@@ -397,7 +398,7 @@ gdt_ptr:
 
 ldt:
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_0	equ		00h
+LDT_CODE_SEL_0	equ		04h
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -406,7 +407,7 @@ LDT_CODE_SEL_0	equ		00h
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24
 ;Data Segment Descriptor										  ;
-LDT_DATA_SEL_0	equ		08h
+LDT_DATA_SEL_0	equ		0Ch
 	; idx:1
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
@@ -415,7 +416,7 @@ LDT_DATA_SEL_0	equ		08h
 	db	0C0h		; limit 19:16, flags
 	db	00h			; base 31:24	
 ;Code Segment Descriptor										  ;
-LDT_CODE_SEL_1	equ		10h
+LDT_CODE_SEL_1	equ		14h
 	; idx:0
 	dw	00FFh		; limit 15:0	
 	dw	0000h		; base 15:0	
