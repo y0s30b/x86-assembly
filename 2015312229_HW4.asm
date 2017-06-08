@@ -1,3 +1,4 @@
+; SKKU Microprocessor HW4 of x86, by Yoseob Kim(2015312229)
 [org 0x7c00]		; Assembly command
 					; Let NASM compiler know starting address of memory
 					; BIOS reads 1st sector and copied it on memory address 0x7c00
@@ -96,7 +97,7 @@ Protected_START:
 ; Base of TSS descriptors and LDTR descriptors										;
 ; Initialize three TSS fields														;
 ; Switch to Task1																		;
-;																					;
+;										 											;
 ;------------------------------------------------------------------------------------	
 
 Task1:
@@ -755,6 +756,44 @@ print_register:
 ;																        ;	
 ;------------------------------------------------------------------------
 tss1 :
+	dw 0	; Previous Task Link
+	dw 0
+	dd 0	; ESP0
+	dw 0	; SS0
+	dw 0
+	dd 0	; ESP1
+	dw 0	; SS1
+	dw 0
+	dd 0	; ESP2
+	dw 0	; SS2
+	dw 0
+	dd 0	; CR3
+	dd 0	; EIP
+	dd 0	; EFLAGS
+	dd 0	; EAX
+	dd 0	; ECX
+	dd 0	; EDX
+	dd 0	; EBX
+	dd 0	; ESP
+	dd 0	; EBP
+	dd 0	; ESI
+	dd 0	; EDI
+	dw 0	; ES
+	dw 0
+	dw 0	; CS
+	dw 0
+	dw 0	; SS
+	dw 0
+	dw 0	; DS
+	dw 0
+	dw 0	; FS
+	dw 0
+	dw 0	; GS
+	dw 0
+	dw 0	; LDT Segment Selector
+	dw 0
+	dw 0
+	dw 0	; I/O Map Base Address
 
 tss2 :
 
