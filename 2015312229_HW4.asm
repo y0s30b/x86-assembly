@@ -140,9 +140,73 @@ Protected_START:
 	; limit setting (ldt3)
 	mov ax, ldt_end - ldt3 - 1
 	mov word [gdt+LDTR3], ax
-	
-; Initialize three TSS fields														;
 
+; Initialize three TSS fields		
+	; tss1												;
+	mov ax, LDTR1			; LDT Segment Selector
+	mov word [tss1+96h], ax
+
+	mov ax, LDT_CODE_SEL1	; CS
+	mov word [tss1+76h], ax
+
+	mov ax, LDT_DATA_SEL1	; DS
+	mov word [tss1+84h], ax
+	
+	mov ax, LDT_DATA_SEL1	; SS
+	mov word [tss1+80h], ax
+
+	mov ax, Video_SEL		; ES
+	mov word [tss1+72h], ax
+
+	mov ax, Task1			; EIP
+	mov word [tss1+32h], ax
+
+	mov ax, 0xA000			; ESP
+	mov word [tss1+56h], ax
+
+	; tss2
+	mov ax, LDTR2			; LDT Segment Selector
+	mov word [tss2+96h], ax
+
+	mov ax, LDT_CODE_SEL2	; CS
+	mov word [tss2+76h], ax
+
+	mov ax, LDT_DATA_SEL2	; DS
+	mov word [tss2+84h], ax
+	
+	mov ax, LDT_DATA_SEL2	; SS
+	mov word [tss2+80h], ax
+
+	mov ax, Video_SEL		; ES
+	mov word [tss2+72h], ax
+
+	mov ax, Task2			; EIP
+	mov word [tss2+32h], ax
+
+	mov ax, 0xB000			; ESP
+	mov word [tss2+56h], ax
+
+	; tss3
+	mov ax, LDTR3			; LDT Segment Selector
+	mov word [tss3+96h], ax
+
+	mov ax, LDT_CODE_SEL3_0	; CS
+	mov word [tss3+76h], ax
+
+	mov ax, LDT_DATA_SEL3	; DS
+	mov word [tss3+84h], ax
+	
+	mov ax, LDT_DATA_SEL3	; SS
+	mov word [tss3+80h], ax
+
+	mov ax, Video_SEL		; ES
+	mov word [tss3+72h], ax
+
+	mov ax, Task3			; EIP
+	mov word [tss3+32h], ax
+
+	mov ax, 0xC000			; ESP
+	mov word [tss3+56h], ax
 ; Switch to Task1																	;
 
 ;										 											;
