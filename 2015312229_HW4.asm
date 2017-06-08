@@ -835,7 +835,7 @@ gdt_ptr:
 ldt1:
 LDT_DATA_SEL1	equ 04h
 	; idx:0
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	92h			; flags, type
@@ -843,7 +843,7 @@ LDT_DATA_SEL1	equ 04h
 	db	00h			; base 31:24
 LDT_CODE_SEL1	equ 0Ch
 	; idx:1
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	9Ah			; flags, type
@@ -853,7 +853,7 @@ LDT_CODE_SEL1	equ 0Ch
 ldt2:
 LDT_DATA_SEL2	equ 04h
 	; idx:0
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	92h			; flags, type
@@ -869,7 +869,7 @@ NULL0			equ 0Ch
 	db 0
 LDT_CODE_SEL2	equ 14h
 	; idx:2
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	9Ah			; flags, type
@@ -879,7 +879,7 @@ LDT_CODE_SEL2	equ 14h
 ldt3:
 LDT_DATA_SEL3	equ 04h
 	; idx:0
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	92h			; flags, type
@@ -887,7 +887,7 @@ LDT_DATA_SEL3	equ 04h
 	db	00h			; base 31:24
 LDT_CODE_SEL3_0	equ 0Ch
 	; idx:1
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	9Ah			; flags, type
@@ -903,7 +903,7 @@ NULL1			equ 14h
 	db 0
 LDT_CODE_SEL3_1	equ 2Ch
 	; idx:3
-	dw	FFFFh		; limit 15:0	
+	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
 	db	00h			; base 23:16
 	db	9Ah			; flags, type
