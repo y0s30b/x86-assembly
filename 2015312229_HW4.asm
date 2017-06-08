@@ -922,20 +922,70 @@ gdt3:
 ;																        ;	
 ;																        ;	
 ;------------------------------------------------------------------------
+
+; System Descriptor(TSS Descriptor) 1
+TSS1Selector			equ 20h
 gdt4:
-
+	dw	0068h	; limit 15:0
+	dw	0000h	; base 15:0
+	db	00h		; base 23:16
+	db	89h		; flags, type
+	db	00h		; flags, limit 19:16
+	db	00h		; base 31:24
+; System Descriptor(TSS Descriptor) 2
+TSS2Selector			equ 28h
 gdt5:
-
+	dw	0068h	; limit 15:0
+	dw	0000h	; base 15:0
+	db	00h		; base 23:16
+	db	89h		; flags, type
+	db	00h		; flags, limit 19:16
+	db	00h		; base 31:24
+; System Descriptor(TSS Descriptor) 3
+TSS3Selector 			equ 30h
 gdt6:
-
+	dw	0068h	; limit 15:0
+	dw	0000h	; base 15:0
+	db	00h		; base 23:16
+	db	89h		; flags, type
+	db	00h		; flags, limit 19:16
+	db	00h		; base 31:24
+; System Descriptor(LDT) 1
+LDTR1					equ 38h
 gdt7:
-
+	dw	0h			; limit 15:0			; temporary set 0
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags	; temporary set 0
+	db	0h			; base 31:24			; temporary set 0
+; System Descriptor(LDT) 2
+LDTR2					equ 40h
 gdt8:
-
+	dw	0h			; limit 15:0			; temporary set 0
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags	; temporary set 0
+	db	0h			; base 31:24			; temporary set 0
+; System Descriptor(LDT) 3
+LDTR3					equ 48h
 gdt9:
-
+	dw	0h			; limit 15:0			; temporary set 0
+	dw	0h			; base 15:0				; temporary set 0
+	db	0h			; base 23:16			; temporary set 0
+	db	82h			; flags, type
+	db	00h			; limit 19:16, flags	; temporary set 0
+	db	0h			; base 31:24			; temporary set 0
+; System Descriptor(Task Gate)
+Task_Gate_Descriptor	equ 50h
 gdt10:
-	
+	dw	0h
+	dw	0h			; TSS Segment Selector - temporary set 0
+	db	0h
+	db	85h			; flags, type
+	db	0h
+	db	0h
 gdt_end:
 
 gdt_ptr:
