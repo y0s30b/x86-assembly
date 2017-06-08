@@ -95,8 +95,56 @@ Protected_START:
 
 ;------------------------------------------------------------------------------------	
 ; Base of TSS descriptors and LDTR descriptors										;
+
+	; ldt1 setting (base address)
+	mov eax, ldt1
+	mov word [gdt+LDTR1+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR1+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt1
+	shr eax, 24
+	mov byte [gdt+LDTR1+7h], al
+
+	; ldt2 setting (base address)
+	mov eax, ldt2
+	mov word [gdt+LDTR2+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR2+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt2
+	shr eax, 24
+	mov byte [gdt+LDTR2+7h], al
+
+	; ldt3 setting (base address)
+	mov eax, ldt3
+	mov word [gdt+LDTR3+2h], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR3+4h], al
+	; base 31:24 of the start address of ldt
+	mov eax, ldt3
+	shr eax, 24
+	mov byte [gdt+LDTR3+7h], al
+
+	; limit setting (ldt1)
+	mov ax, ldt2 - ldt1 - 1
+	mov word [gdt+LDTR1], ax
+
+	; limit setting (ldt2)
+	mov ax, ldt3 - ldt2 - 1
+	mov word [gdt+LDTR2], ax
+
+	; limit setting (ldt3)
+	mov ax, ldt_end - ldt3 - 1
+	mov word [gdt+LDTR3], ax
+	
 ; Initialize three TSS fields														;
-; Switch to Task1																		;
+
+; Switch to Task1																	;
+
 ;										 											;
 ;------------------------------------------------------------------------------------	
 
