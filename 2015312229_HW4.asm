@@ -314,6 +314,8 @@ Task1:
 	mov bl, 0x02
 	call printf
 
+;	jmp $
+
 	call print_tss1_store
 	call print_tss2_store
 	call print_tss3_store
@@ -365,7 +367,7 @@ Task2:
 	call printf
 
 ; return to Task1
-	jmp $
+;	jmp $
 
 ;	mov ax, TSS1Selector
 ;	ltr ax
@@ -399,7 +401,7 @@ Task3_next:
 ;	jmp $
 ;	mov eax, 3
 ;	jmp $
-	jmp $
+;	jmp $
 	iret
 
 	;jmp $		; this is ending point of program
