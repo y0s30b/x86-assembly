@@ -267,15 +267,15 @@ Protected_START:
 ;	call print_busy2_task
 ;	jmp $
 
-	mov ax, TSS1Selector
-	ltr ax
+;	mov ax, TSS1Selector
+;	ltr ax
 
 ;	mov ax, LDTR1
 ;	lldt ax
 
 ;	jmp LDT_CODE_SEL1:Task1
-;	jmp TSS1Selector:Task1
-	jmp Task1
+	jmp TSS1Selector:Task1
+;	jmp Task1
 ;										 											;
 ;------------------------------------------------------------------------------------	
 
@@ -289,24 +289,26 @@ Task1:
 	mov bl, 0x02
 	call printf
 
-;	jmp $
+	jmp $
 
 	mov eax, 0x0A
 	mov ebx, 0x0B
 	cmp eax, ebx
 
 ; call Task2 
-	mov ax, TSS2Selector
-	ltr ax
+;	mov ax, TSS2Selector
+;	ltr ax
 
 ;	mov ax, LDTR2
 ;	lldt ax
 
 ;	call LDT_CODE_SEL2:Task2
-;	call TSS2Selector:Task2
-	call Task2
-	
+	call TSS2Selector:Task2
+	;; this point!!!!!! 0609 14:49
+;	call Task2
+;	jmp $
 ; print "Task1 switched BACK from Task2"	
+
 	mov edi, 80*2*8+2*0
 	mov eax, Task1_Back
 	mov bl, 0x02
@@ -355,7 +357,7 @@ Task2:
 ;	call LDT_CODE_SEL3_0:Task3
 ;	call Task3
 	call Task_Gate_Descriptor:0
-
+;	jmp $
 ; print "Task2 switched BACK from Task3"
 	mov edi, 80*2*7+2*0
 	mov eax, Task2_Back
@@ -363,6 +365,10 @@ Task2:
 	call printf
 
 ; return to Task1
+	jmp $
+
+;	mov ax, TSS1Selector
+;	ltr ax
 	iret
 
 Task3:
@@ -389,9 +395,10 @@ Task3_next:
 	call printf
 
 ; return to Task2
-
-	mov eax, 3
-	jmp $
+;	mov eax, 3
+;	jmp $
+;	mov eax, 3
+;	jmp $
 	iret
 
 	;jmp $		; this is ending point of program
