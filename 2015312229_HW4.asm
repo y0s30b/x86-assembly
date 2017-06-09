@@ -289,7 +289,7 @@ Task1:
 	mov bl, 0x02
 	call printf
 
-	jmp $
+;	jmp $
 
 	mov eax, 0x0A
 	mov ebx, 0x0B
@@ -383,7 +383,7 @@ Task3:
 	call printf
 
 ; control transfer
-	;jmp $
+	;jmp $	; success to this point! (06-09 15:06)
 	jmp LDT_CODE_SEL3_1:Task3_next
 
 Task3_next:
@@ -399,6 +399,7 @@ Task3_next:
 ;	jmp $
 ;	mov eax, 3
 ;	jmp $
+	jmp $
 	iret
 
 	;jmp $		; this is ending point of program
