@@ -96,38 +96,80 @@ Protected_START:
 ;------------------------------------------------------------------------------------	
 ; Base of TSS descriptors and LDTR descriptors										;
 
-	; ldt1 setting (base address)
-	mov eax, ldt1
-	mov word [gdt+LDTR1+2h], ax
+	; TSS1Selector (base address)
+	mov eax, tss1
+	mov word [gdt+TSS1Selector+2], ax
 	; base 23:16 of the start address of ldt
 	shr eax, 16
-	mov byte [gdt+LDTR1+4h], al
+	mov byte [gdt+TSS1Selector+4], al
+	; base 31:24 of the start address of ldt
+	mov eax, tss1
+	shr eax, 24
+	mov byte [gdt+TSS1Selector+7], al
+		
+;	call print_busy2_task
+;	jmp $
+
+	; TSS2Selector (base address)
+	mov eax, tss2
+	mov word [gdt+TSS2Selector+2], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+TSS2Selector+4], al
+	; base 31:24 of the start address of ldt
+	mov eax, tss2
+	shr eax, 24
+	mov byte [gdt+TSS2Selector+7], al
+
+;	call print_busy2_task
+;	jmp $
+
+	; TSS3Selector (base address)
+	mov eax, tss3
+	mov word [gdt+TSS3Selector+2], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+TSS3Selector+4], al
+	; base 31:24 of the start address of ldt
+	mov eax, tss3
+	shr eax, 24
+	mov byte [gdt+TSS3Selector+7], al
+	
+;	call print_busy2_task
+;	jmp $
+
+	; ldt1 setting (base address)
+	mov eax, ldt1
+	mov word [gdt+LDTR1+2], ax
+	; base 23:16 of the start address of ldt
+	shr eax, 16
+	mov byte [gdt+LDTR1+4], al
 	; base 31:24 of the start address of ldt
 	mov eax, ldt1
 	shr eax, 24
-	mov byte [gdt+LDTR1+7h], al
+	mov byte [gdt+LDTR1+7], al
 
 	; ldt2 setting (base address)
 	mov eax, ldt2
-	mov word [gdt+LDTR2+2h], ax
+	mov word [gdt+LDTR2+2], ax
 	; base 23:16 of the start address of ldt
 	shr eax, 16
-	mov byte [gdt+LDTR2+4h], al
+	mov byte [gdt+LDTR2+4], al
 	; base 31:24 of the start address of ldt
 	mov eax, ldt2
 	shr eax, 24
-	mov byte [gdt+LDTR2+7h], al
+	mov byte [gdt+LDTR2+7], al
 
 	; ldt3 setting (base address)
 	mov eax, ldt3
-	mov word [gdt+LDTR3+2h], ax
+	mov word [gdt+LDTR3+2], ax
 	; base 23:16 of the start address of ldt
 	shr eax, 16
-	mov byte [gdt+LDTR3+4h], al
+	mov byte [gdt+LDTR3+4], al
 	; base 31:24 of the start address of ldt
 	mov eax, ldt3
 	shr eax, 24
-	mov byte [gdt+LDTR3+7h], al
+	mov byte [gdt+LDTR3+7], al
 
 	; limit setting (ldt1)
 	mov ax, ldt2 - ldt1 - 1
@@ -141,74 +183,99 @@ Protected_START:
 	mov ax, ldt_end - ldt3 - 1
 	mov word [gdt+LDTR3], ax
 
+;	call print_busy2_task
+;	jmp $
+
 ; Initialize three TSS fields		
 	; tss1												;
 	mov ax, LDTR1			; LDT Segment Selector
-	mov word [tss1+96h], ax
+	mov word [tss1+96], ax
 
 	mov ax, LDT_CODE_SEL1	; CS
-	mov word [tss1+76h], ax
+	mov word [tss1+76], ax
 
 	mov ax, LDT_DATA_SEL1	; DS
-	mov word [tss1+84h], ax
+	mov word [tss1+84], ax
 	
 	mov ax, LDT_DATA_SEL1	; SS
-	mov word [tss1+80h], ax
+	mov word [tss1+80], ax
 
 	mov ax, Video_SEL		; ES
-	mov word [tss1+72h], ax
+	mov word [tss1+72], ax
 
 	mov ax, Task1			; EIP
-	mov word [tss1+32h], ax
+	mov word [tss1+32], ax
 
 	mov ax, 0xA000			; ESP
-	mov word [tss1+56h], ax
+	mov word [tss1+56], ax
+	
+;	call print_busy2_task
+;	jmp $
 
 	; tss2
 	mov ax, LDTR2			; LDT Segment Selector
-	mov word [tss2+96h], ax
+	mov word [tss2+96], ax
 
 	mov ax, LDT_CODE_SEL2	; CS
-	mov word [tss2+76h], ax
+	mov word [tss2+76], ax
 
 	mov ax, LDT_DATA_SEL2	; DS
-	mov word [tss2+84h], ax
+	mov word [tss2+84], ax
 	
 	mov ax, LDT_DATA_SEL2	; SS
-	mov word [tss2+80h], ax
+	mov word [tss2+80], ax
 
 	mov ax, Video_SEL		; ES
-	mov word [tss2+72h], ax
+	mov word [tss2+72], ax
 
 	mov ax, Task2			; EIP
-	mov word [tss2+32h], ax
+	mov word [tss2+32], ax
 
 	mov ax, 0xB000			; ESP
-	mov word [tss2+56h], ax
-
+	mov word [tss2+56], ax
+	
+;	call print_busy2_task
+;	jmp $
+	
 	; tss3
 	mov ax, LDTR3			; LDT Segment Selector
-	mov word [tss3+96h], ax
+	mov word [tss3+96], ax
 
+;	call print_busy2_task
+;	jmp $
 	mov ax, LDT_CODE_SEL3_0	; CS
-	mov word [tss3+76h], ax
+	mov word [tss3+76], ax
 
 	mov ax, LDT_DATA_SEL3	; DS
-	mov word [tss3+84h], ax
+	mov word [tss3+84], ax
 	
 	mov ax, LDT_DATA_SEL3	; SS
-	mov word [tss3+80h], ax
+	mov word [tss3+80], ax
 
 	mov ax, Video_SEL		; ES
-	mov word [tss3+72h], ax
+	mov word [tss3+72], ax
 
 	mov ax, Task3			; EIP
-	mov word [tss3+32h], ax
+	mov word [tss3+32], ax
 
 	mov ax, 0xC000			; ESP
-	mov word [tss3+56h], ax
+	mov word [tss3+56], ax
+
+
 ; Switch to Task1																	;
 
+;	call print_busy2_task
+;	jmp $
+
+	mov ax, TSS1Selector
+	ltr ax
+
+;	mov ax, LDTR1
+;	lldt ax
+
+;	jmp LDT_CODE_SEL1:Task1
+;	jmp TSS1Selector:Task1
+	jmp Task1
 ;										 											;
 ;------------------------------------------------------------------------------------	
 
@@ -217,16 +284,34 @@ Task1:
 	call print_reg_1
 
 ; print "Task1 switched"
+	mov edi, 80*2*3+2*0
+	mov eax, Task1_Start
+	mov bl, 0x02
+	call printf
+
+;	jmp $
 
 	mov eax, 0x0A
 	mov ebx, 0x0B
 	cmp eax, ebx
 
 ; call Task2 
+	mov ax, TSS2Selector
+	ltr ax
 
+;	mov ax, LDTR2
+;	lldt ax
+
+;	call LDT_CODE_SEL2:Task2
+;	call TSS2Selector:Task2
+	call Task2
 	
 ; print "Task1 switched BACK from Task2"	
-	
+	mov edi, 80*2*8+2*0
+	mov eax, Task1_Back
+	mov bl, 0x02
+	call printf
+
 	call print_tss1_store
 	call print_tss2_store
 	call print_tss3_store
@@ -234,7 +319,7 @@ Task1:
 	call print_busy2_end
 	call print_busy3_end
 	
-	;jmp $					; this is ending point of program
+	jmp $					; this is ending point of program
 							; when switched back from task2, this line must be active to end program
 	
 	
@@ -245,6 +330,10 @@ Task2:
 	call print_busy2_task
 	
 ; print "Task2 switched from Task1"
+	mov edi, 80*2*4+2*0
+	mov eax, Task2_Start
+	mov bl, 0x02
+	call printf
 	
 	mov eax, 0x0A
 	push eax
@@ -253,11 +342,28 @@ Task2:
 	mov ecx, 0x0C
 	push ecx
 
+;	jmp $
+
 ; call Task3 using Task Gate
-	
+	mov ax, TSS3Selector
+	mov word [gdt+Task_Gate_Descriptor+2], ax
+
+;	call Task_Gate_Descriptor:Task3
+;	mov ax, LDTR3
+;	lldt ax
+
+;	call LDT_CODE_SEL3_0:Task3
+;	call Task3
+	call Task_Gate_Descriptor:0
+
 ; print "Task2 switched BACK from Task3"
+	mov edi, 80*2*7+2*0
+	mov eax, Task2_Back
+	mov bl, 0x02
+	call printf
 
 ; return to Task1
+	iret
 
 Task3:
 
@@ -265,16 +371,30 @@ Task3:
 	call print_busy3_task
 	
 ; print "Task3 Switched from Task2"
-	
+	mov edi, 80*2*5+2*0
+	mov eax, Task3_Start
+	mov bl, 0x02
+	call printf
+
 ; control transfer
-	
+	;jmp $
+	jmp LDT_CODE_SEL3_1:Task3_next
+
 Task3_next:
 
 ; print "Jumped to Task3_Next with LDT_CODE_SEL3_1"
-	
+	mov edi, 80*2*6+2*0
+	mov eax, MSG_TASK3_Next
+	mov bl, 0x02
+	call printf
+
 ; return to Task2
 
-	jmp $		; this is ending point of program
+	mov eax, 3
+	jmp $
+	iret
+
+	;jmp $		; this is ending point of program
 				; when you make the task switching code, this line must be deactive 
 				
 ;------------------------------------------------------------------------------------------
@@ -1179,7 +1299,7 @@ NULL1			equ 14h
 	db 0
 	db 0
 	db 0
-LDT_CODE_SEL3_1	equ 2Ch
+LDT_CODE_SEL3_1	equ 1Ch
 	; idx:3
 	dw	0FFFFh		; limit 15:0	
 	dw	0000h		; base 15:0	
