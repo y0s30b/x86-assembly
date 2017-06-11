@@ -1,3 +1,4 @@
+; SKKU Microprocessor HW5 of x86, by Yoseob Kim(2015312229)
 [org 0x7c00]		; Assembly command
 					; Let NASM compiler know starting address of memory
 					; BIOS reads 1st sector and copied it on memory address 0x7c00
