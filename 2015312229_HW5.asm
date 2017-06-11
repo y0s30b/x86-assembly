@@ -77,10 +77,15 @@ Protected_START:
 ;code your program----------------------------------------------------------------------------------------	
 
 ; load idt
+	lidt [idt_ptr]
+;	jmp $
 ; set offset of Interrupt Descriptor
-
-
-
+	mov eax, irq_00
+;	jmp $
+	mov word [idt], ax
+	shr eax, 16
+	mov word [idt+4], ax
+;	jmp $
 ;----------------------------------------------------------------------------------------------------------
 
 	; put base of tss1 on gdt4
@@ -122,15 +127,25 @@ task1:
 	
 	call print_reg_1	
 	
-	jmp $		; this is ending point of program
+	;jmp $		; this is ending point of program
 				; when you complete the code, this line must be deactive 
 	
 	;Use IDT for switching task2 
-	
+	;jmp TSS2Selector:0 ; ** Is something different if use IDT ? 
+	;jmp Task_Gate_idx48:0
+	INT 30h
+	;jmp $
 	call print_reg_3
-	
-	; print "Task2 switched from Task1"	
-	
+	;jmp $ ; ---*** success to this point
+
+	; print "Task2 switched from Task1"	 - comment error?
+	; I think in this part, print "Task1 switched BACK from Task2" is proper message.
+	mov edi, 80*2*3+2*0
+	mov eax, Task2_Back
+	mov bl, 0x02
+	call printf
+	jmp $	; *** success to this point 0611 17:40
+
 	xor edx, edx
 	mov eax, 10
 	mov ebx, 0
@@ -140,12 +155,22 @@ return:
 	call print_reg_5
 	
 	; print "Task1 switched BACK from IRQ"
+	mov edi, 80*2*4+2*0
+	mov eax, IRQ_Back
+	mov bl, 0x02
+	call printf
 	
-	;jmp $					; this is ending point of program
+	jmp $					; this is ending point of program
 							; when return from IRQ, this line must be active to end program
 		
 task2:
 	; print "Task2 switched from Task1"
+
+	mov edi, 80*2*2+2*0
+	mov eax, Task2_Start
+	mov bl, 0x02
+	call printf
+
 	; return to task1
 	
 	mov eax, [esp-16]
@@ -157,12 +182,22 @@ task2:
 	
 	call print_reg_2
 
+	iret
+
 irq_00:						
 	call print_reg_4
 
 ; print "Divided by Zero"
+	mov edi, 80*2*10+2*0
+	mov eax, MSG_irq00h
+	mov bl, 0x02
+	call printf
+
 ; Do not forget use push/pop (all and flags) for storing register values
+
+; ???
 ; return to task1, return label	
+	iret 
 
 
 	
@@ -1059,21 +1094,168 @@ gdt_ptr:
 	
 ;--------------------------------------------------------------------------------------------------------
 ; Make Interrupt Descriptor Table
+idt:
+	; Interrupt vector number 0 - Divide by zero
+	dw	0000h		; Offset 15:0
+	dw	SYS_EXT_SEL	; Segment Selector
+	db	00h			; reserved
+	db	8Eh			; present, priv = 00, 32-bit size(D=1)
+	dw	0000h		; Offset 31:16
+	
+	; v1
+	dd	0
+	dd	0
+	; v2
+	dd	0
+	dd	0
+	; v3
+	dd	0
+	dd	0
+	; v4
+	dd	0
+	dd	0
+	; v5
+	dd	0
+	dd	0
+	; v6
+	dd	0
+	dd	0
+	; v7
+	dd	0
+	dd	0
+	; v8
+	dd	0
+	dd	0
+	; v9
+	dd	0
+	dd	0
+	; v10
+	dd	0
+	dd	0
+	; v11
+	dd	0
+	dd	0
+	; v12
+	dd	0
+	dd	0
+	; v13
+	dd	0
+	dd	0
+	; v14
+	dd	0
+	dd	0
+	; v15
+	dd	0
+	dd	0
+	; v16
+	dd	0
+	dd	0
+	; v17
+	dd	0
+	dd	0
+	; v18
+	dd	0
+	dd	0
+	; v19
+	dd	0
+	dd	0
+	; v20
+	dd	0
+	dd	0
+	; v21
+	dd	0
+	dd	0
+	; v22
+	dd	0
+	dd	0
+	; v23
+	dd	0
+	dd	0
+	; v24
+	dd	0
+	dd	0
+	; v25
+	dd	0
+	dd	0
+	; v26
+	dd	0
+	dd	0
+	; v27
+	dd	0
+	dd	0
+	; v28
+	dd	0
+	dd	0
+	; v29
+	dd	0
+	dd	0
+	; v30
+	dd	0
+	dd	0
+	; v31
+	dd	0
+	dd	0
+	; v32
+	dd	0
+	dd	0
+	; v33
+	dd	0
+	dd	0
+	; v34
+	dd	0
+	dd	0
+	; v35
+	dd	0
+	dd	0
+	; v36
+	dd	0
+	dd	0
+	; v37
+	dd	0
+	dd	0
+	; v38
+	dd	0
+	dd	0
+	; v39
+	dd	0
+	dd	0
+	; v40
+	dd	0
+	dd	0
+	; v41
+	dd	0
+	dd	0
+	; v42
+	dd	0
+	dd	0
+	; v43
+	dd	0
+	dd	0
+	; v44
+	dd	0
+	dd	0
+	; v45
+	dd	0
+	dd	0
+	; v46
+	dd	0
+	dd	0
+	; v47
+	dd	0
+	dd	0
+	; v48 - Task Gate Descriptor
+Task_Gate_idx48	equ	30h
+	dw	0				; reserved
+	dw	TSS2Selector	; TSS Segment Selector
+	db	0				; reserved
+	db	85h				; present, priv level = 00, flags
+	dw	0				; reserved
 
+idt_end:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+idt_ptr:
+	dw idt_end - idt - 1
+	dd idt
 
 sector_end:
 
