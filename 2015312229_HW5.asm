@@ -186,62 +186,33 @@ task2:
 
 irq_00:						
 	call print_reg_4
-;	jmp $
-;	pushad
 
-	; *** my solution *** DESCRIPTION 1 ~ 6 !!! MUST BE READ ;
-	; 1. When trying 'div ebx', a fault occurs and interrupt service routine(=irq_00) is execute, and
-	; comes to this point.
-
-	; 2. if we go back to 'return' label, eax~edx register value should be same as the moment when call 'print_reg_4'.
-	; thus, we have to store eax~edx values before printing MSG_irq00h("Divide by Zero" message).
-
-	push eax
-	push ebx
-	push ecx
-	push edx
-
-;	push eflags
+	pushad	; push all
+	pushfd	; push flags
 
 ; print "Divided by Zero"
 	mov edi, 80*2*10+2*0
 	mov eax, MSG_irq00h
 ;	mov bl, 0x02
-	mov bl, 0x0f	; white color
+	mov bl, 0x3f	; white color
 	call printf
 
-;	call print_reg_4
-;	jmp $
 ; Do not forget use push/pop (all and flags) for storing register values
-;	popad
-;
-;	pop ebp
-;	push return
-; return to task1, return label	
-	;iret
-;	pop eflags
-
-	; 3. right after printing MSG_irq00h, we have to restor original eax~edx value so,
-	; pop those values from stack. (stack is LIFO structure, so reversed order comes.)
-	pop edx
-	pop ecx
-	pop ebx
-	pop eax
 	
-	; 4. div by zero(vector number 0) exception does not create any 'error code' so
-	; in the stack, eflags-cs-eip is stored and the 'esp' is pointing 'eip' value in the stack.
+	popfd	; pop flags
+	popad	; pop all
 	
-	; 5. We should update this 'eip' value to 'new eip' value with 'return' label.
-	; so pop the origin 'eip' value to ebp(it is a register which do not print when calling print_reg_x).
-	; and then, push 'return' label's address to the stack.
-	; ** after this, in the stack, eflags-cs-neweip is stored and the 'esp' is pointing 'neweip' value in the stack.
-	; 'neweip' value would be same as 'return' label because we stored the value in the stack.
+	; *** my solution ***
+	; 1. there's no error code when executing 'div by zero' exception(vector number 0),
+	; so one pop instruction removes original eip in the stack.
 	pop ebp
 	push return
+	; 2. after removing original eip value in the stack, we have to store new eip value(return label)
+	; in to the stack.
 
 	iret
-	; 6. 'iret' instruction will pop neweip-cs-eflags values, and the flow of program goes to 'return' value.
-
+	; 3. iret instruction will pop eip, cs, eflags in the stack.
+	
 	
 MSG_Protected_MODE_Test: db'Protected Mode',0
 Task2_Start: db'Task2 switched from Task1',0
